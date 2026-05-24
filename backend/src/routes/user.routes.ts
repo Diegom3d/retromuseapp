@@ -1,15 +1,18 @@
-// user.routes.ts
 import { Router } from 'express';
 import { authenticate } from '../middleware/auth.middleware';
+import { getUsers, getUserById, updateProfile, deleteUser } from '../controllers/user.controller';
+import { toggleFollow, getFollowers, getFollowing } from '../controllers/follower.controller';
+
 const router = Router();
 
-router.get('/', async (_req, res) => res.json({ users: [], message: 'Listar artistas' }));
-router.get('/:id', async (req, res) => res.json({ id: req.params.id }));
-router.put('/:id', authenticate, async (req, res) => res.json({ message: 'Perfil actualizado' }));
-router.delete('/:id', authenticate, async (req, res) => res.json({ message: 'Cuenta eliminada' }));
-router.post('/:id/follow', authenticate, async (req, res) => res.json({ message: 'Siguiendo artista' }));
-router.delete('/:id/follow', authenticate, async (req, res) => res.json({ message: 'Dejaste de seguir' }));
-router.get('/:id/followers', async (req, res) => res.json({ followers: [] }));
-router.get('/:id/following', async (req, res) => res.json({ following: [] }));
+router.get('/', getUsers);
+router.get('/:id', getUserById);
+router.put('/:id', authenticate, updateProfile);
+router.delete('/:id', authenticate, deleteUser);
+
+router.post('/:id/follow', authenticate, toggleFollow);
+router.delete('/:id/follow', authenticate, toggleFollow);
+router.get('/:id/followers', getFollowers);
+router.get('/:id/following', getFollowing);
 
 export default router;

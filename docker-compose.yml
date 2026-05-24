@@ -82,7 +82,7 @@ services:
       VITE_API_URL:  http://localhost:4000/api
       VITE_APP_NAME: RetroMuse
     ports:
-      - '5173:5173'
+      - '5173:80'
 
 volumes:
   postgres_data:

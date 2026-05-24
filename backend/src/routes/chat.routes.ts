@@ -1,10 +1,12 @@
 import { Router } from 'express';
 import { authenticate } from '../middleware/auth.middleware';
+import { getChats, createChat, getMessages, sendMessage } from '../controllers/chat.controller';
+
 const router = Router();
 
-router.get('/', authenticate, async (_req, res) => res.json({ chats: [] }));
-router.post('/', authenticate, async (_req, res) => res.status(201).json({ message: 'Conversación iniciada' }));
-router.get('/:id/messages', authenticate, async (req, res) => res.json({ messages: [] }));
-router.post('/:id/messages', authenticate, async (_req, res) => res.status(201).json({ message: 'Enviado' }));
+router.get('/', authenticate, getChats);
+router.post('/', authenticate, createChat);
+router.get('/:id/messages', authenticate, getMessages);
+router.post('/:id/messages', authenticate, sendMessage);
 
 export default router;

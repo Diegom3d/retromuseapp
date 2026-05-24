@@ -1,8 +1,10 @@
 import { Router } from 'express';
 import { authenticate } from '../middleware/auth.middleware';
+import { getCustomization, updateCustomization } from '../controllers/customization.controller';
+
 const router = Router();
 
-router.get('/:userId', async (req, res) => res.json({ userId: req.params.userId, theme: {} }));
-router.put('/:userId', authenticate, async (_req, res) => res.json({ message: 'Personalización guardada' }));
+router.get('/:userId', getCustomization);
+router.put('/:userId', authenticate, updateCustomization);
 
 export default router;
