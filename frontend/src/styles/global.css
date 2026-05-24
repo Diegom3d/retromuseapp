@@ -1,0 +1,219 @@
+/* ============================================================
+   RetroMuse — Global Styles (Estética 2000)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323:wght@400&family=Silkscreen:wght@400;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+
+:root {
+  /* Paleta retro-2000 */
+  --color-bg:          #0a0010;
+  --color-surface:     #120020;
+  --color-surface-2:   #1e0035;
+  --color-border:      #6b00b6;
+  --color-primary:     #cc00ff;
+  --color-primary-glow:#ff66ff;
+  --color-accent:      #00ffcc;
+  --color-accent-2:    #ff0099;
+  --color-text:        #f0d0ff;
+  --color-text-muted:  #9966bb;
+  --color-link:        #ff99ff;
+  --color-star:        #ffee00;
+
+  /* Tipografía */
+  --font-display:  'Press Start 2P', monospace;
+  --font-pixel:    'VT323', monospace;
+  --font-ui:       'Silkscreen', monospace;
+  --font-body:     'Space Mono', monospace;
+
+  /* Glow effects */
+  --glow-primary:  0 0 8px #cc00ff, 0 0 20px #cc00ff55;
+  --glow-accent:   0 0 8px #00ffcc, 0 0 20px #00ffcc55;
+  --glow-pink:     0 0 8px #ff0099, 0 0 20px #ff009955;
+
+  /* Borders */
+  --border-pixel:  2px solid var(--color-border);
+  --border-glow:   1px solid var(--color-primary);
+}
+
+/* Reset */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--color-bg);
+  background-image:
+    radial-gradient(ellipse at 20% 50%, #2d006640 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, #00004440 0%, transparent 50%),
+    url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h1v1H0z' fill='%23cc00ff08'/%3E%3C/svg%3E");
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Scrollbar retro */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--color-bg); }
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 0;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--color-primary); }
+
+/* Links */
+a {
+  color: var(--color-link);
+  text-decoration: none;
+  transition: color 0.2s, text-shadow 0.2s;
+}
+a:hover {
+  color: var(--color-primary-glow);
+  text-shadow: var(--glow-primary);
+}
+
+/* Headings */
+h1, h2, h3 { font-family: var(--font-display); line-height: 1.3; }
+h4, h5, h6 { font-family: var(--font-ui); }
+
+/* Buttons */
+.btn {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  padding: 8px 16px;
+  border: var(--border-pixel);
+  background: transparent;
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+}
+.btn:hover {
+  background: var(--color-primary);
+  color: var(--color-bg);
+  box-shadow: var(--glow-primary);
+}
+.btn-primary {
+  background: var(--color-primary);
+  color: var(--color-bg);
+}
+.btn-primary:hover {
+  background: var(--color-primary-glow);
+  box-shadow: var(--glow-primary);
+}
+.btn-accent {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+.btn-accent:hover {
+  background: var(--color-accent);
+  color: var(--color-bg);
+  box-shadow: var(--glow-accent);
+}
+
+/* Cards */
+.card {
+  background: var(--color-surface);
+  border: var(--border-pixel);
+  padding: 16px;
+  position: relative;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: linear-gradient(135deg, var(--color-primary) 0%, transparent 50%, var(--color-accent-2) 100%);
+  z-index: -1;
+  opacity: 0.3;
+}
+
+/* Inputs */
+input, textarea, select {
+  font-family: var(--font-body);
+  background: var(--color-surface-2);
+  border: var(--border-pixel);
+  color: var(--color-text);
+  padding: 8px 12px;
+  width: 100%;
+  outline: none;
+  font-size: 14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+input:focus, textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: var(--glow-primary);
+}
+input::placeholder { color: var(--color-text-muted); }
+
+/* Animations */
+@keyframes glitch {
+  0%, 100% { transform: translate(0); }
+  20%       { transform: translate(-2px, 1px); }
+  40%       { transform: translate(2px, -1px); }
+  60%       { transform: translate(-1px, 2px); }
+  80%       { transform: translate(1px, -2px); }
+}
+
+@keyframes scanline {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
+  50%       { opacity: 0.5; transform: scale(1.2) rotate(180deg); }
+}
+
+@keyframes marquee {
+  0%   { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: var(--glow-primary); }
+  50%       { box-shadow: 0 0 20px #cc00ff, 0 0 40px #cc00ff55; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+
+.animate-glitch     { animation: glitch 0.3s infinite; }
+.animate-sparkle    { animation: sparkle 2s infinite; }
+.animate-float      { animation: float 3s ease-in-out infinite; }
+.animate-pulse-glow { animation: pulse-glow 2s infinite; }
+
+/* Marquee (ticker de artistas) */
+.marquee-container { overflow: hidden; white-space: nowrap; }
+.marquee-text      { display: inline-block; animation: marquee 20s linear infinite; }
+
+/* Utilities */
+.glow-text    { text-shadow: var(--glow-primary); }
+.glow-accent  { text-shadow: var(--glow-accent); }
+.pixel-border { image-rendering: pixelated; }
+.retro-grid {
+  display: grid;
+  gap: 2px;
+  background: var(--color-border);
+}
+
+/* Scanline overlay */
+.scanlines::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.05) 2px,
+    rgba(0, 0, 0, 0.05) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}

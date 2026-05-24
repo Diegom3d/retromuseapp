@@ -1,0 +1,89 @@
+services:
+  # ── PostgreSQL ─────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: retromuse_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB:       retromusedb
+      POSTGRES_USER:     retromuse
+      POSTGRES_PASSWORD: retromuse_dev_pass
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/sql/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql
+      - ./database/sql/seed.sql:/docker-entrypoint-initdb.d/02_seed.sql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U retromuse -d retromusedb']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── MongoDB ────────────────────────────────────────────────
+  mongodb:
+    image: mongo:7-jammy
+    container_name: retromuse_mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: retromuse
+      MONGO_INITDB_ROOT_PASSWORD: retromuse_dev_pass
+      MONGO_INITDB_DATABASE:      retromusedb
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ['CMD', 'mongosh', '--eval', "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Backend ────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: retromuse_backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+    environment:
+      PORT:           4000
+      NODE_ENV:       development
+      DATABASE_URL:   postgresql://retromuse:retromuse_dev_pass@postgres:5432/retromusedb
+      MONGO_URI:      mongodb://retromuse:retromuse_dev_pass@mongodb:27017/retromusedb?authSource=admin
+      JWT_SECRET:     dev_jwt_secret_change_in_production_min32chars
+      JWT_EXPIRES_IN: 7d
+      FRONTEND_URL:   http://localhost:5173
+    ports:
+      - '4000:4000'
+    volumes:
+      - ./backend/src:/app/src    # hot reload en desarrollo
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:4000/health']
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  # ── Frontend ───────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: retromuse_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      VITE_API_URL:  http://localhost:4000/api
+      VITE_APP_NAME: RetroMuse
+    ports:
+      - '5173:5173'
+
+volumes:
+  postgres_data:
+  mongo_data:
