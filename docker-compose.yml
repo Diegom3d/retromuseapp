@@ -51,6 +51,8 @@ services:
         condition: service_healthy
       mongodb:
         condition: service_healthy
+    env_file:
+      - ./backend/.env
     environment:
       PORT:           4000
       NODE_ENV:       development
