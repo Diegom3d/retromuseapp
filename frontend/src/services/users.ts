@@ -3,7 +3,8 @@ import type { ArtistProfile, User } from '../types';
 
 export const usersService = {
   getProfile: (id: string) =>
-    api.get<{ user: User; profile: ArtistProfile }>(`/users/${id}`).then(r => r.data),
+    api.get<User & { profile?: ArtistProfile }>(`/users/${id}`)
+      .then(r => ({ user: r.data, profile: r.data.profile ?? null })),
 
   getFollowers: (id: string) =>
     api.get<ArtistProfile[]>(`/users/${id}/followers`).then(r => r.data),

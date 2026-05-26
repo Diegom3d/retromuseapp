@@ -1,7 +1,7 @@
 import { useState, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import api from '../services/api';
+import { postsService } from '../services/posts';
 
 const postTypes = [
   { value: 'artwork', label: '🎨 Obra de Arte' },
@@ -23,14 +23,20 @@ export default function CreatePostPage() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await api.post('/posts', {
-        ...form,
+      await postsService.create({
+        title: form.title,
+        content: form.content,
+        type: form.type,
         tags: form.tags.split(',').map(t => t.trim()).filter(Boolean),
       });
       toast.success('¡Publicación creada! 🎨');
       navigate('/feed');
-    } catch {
-      toast.error('Error al publicar');
+    } catch (error: unknown) {
+      const message =
+        typeof error === 'object' && error !== null && 'response' in error && (error as any).response?.data?.error
+          ? (error as any).response.data.error
+          : 'Error al publicar';
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }

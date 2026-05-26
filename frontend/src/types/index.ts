@@ -8,6 +8,7 @@ export interface User {
   email: string;
   role: 'artist' | 'admin';
   created_at: string;
+  profile?: ArtistProfile;
 }
 
 export interface ArtistProfile {

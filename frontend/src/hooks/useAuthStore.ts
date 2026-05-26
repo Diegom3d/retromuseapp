@@ -35,7 +35,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
     try {
       const { data } = await api.post<LoginResponse>('/auth/register', payload);
       localStorage.setItem('retromuse_token', data.token);
-      set({ token: data.token, isAuthenticated: true });
+      set({ user: data.user, token: data.token, isAuthenticated: true });
     } finally {
       set({ isLoading: false });
     }
